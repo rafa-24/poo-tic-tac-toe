@@ -4,21 +4,12 @@ require_relative 'board'
 class Game
   
   def start_game
-    print 'Bienvenido a triki Ingresa un nombre de usuario para continuar: '
-    name = gets.chomp
-    print 'Elige un avatar: '
-    avatar = gets.chomp
-    player_one = Player.new(name, avatar)
-    player_one.show_info
+    print "Bienvenido a triki\n"
 
-    print 'Bienvenido a triki Ingresa un nombre de usuario para continuar: '
-    name_second = gets.chomp
-    print 'Elige un avatar: '
-    avatar_second = gets.chomp
-    player_second = Player.new(name_second, avatar_second)
-    player_second.show_info
+    player_one = Player.create_player(1)
+    player_two = Player.create_player(2)
 
-    # crear tablero
+    # crear tablero # refactorizar en clase board
     print 'Seleccione numero de filas del tablero: '
     rows = gets.chomp.to_i
     print 'Seleccione numero de columnas del tablero: '
@@ -26,12 +17,19 @@ class Game
     board = Board.new(rows, columns)
     board.create_board
 
-    # jugar por turnos
+    # Jugar
+    play_rounds(board, player_one, player_two)
+
+  end
+
+  private
+
+  def play_rounds(board, player_one, player_two)
     total_cell = board.rows * board.columns
     turn = 0
 
     while turn < total_cell
-      current_player = turn.even? ? player_one : player_second
+      current_player = turn.even? ? player_one : player_two
       puts "Es el tu turno #{current_player.name} #{current_player.avatar}"
 
       print 'Elige la fila: '
@@ -51,7 +49,8 @@ class Game
         puts "❌ Movimiento no válido, intenta otra vez."
       end      
     end
-    puts "\n🟡 El tablero está lleno. ¡Juego terminado!"
+
+     puts "\n🟡 El tablero está lleno. ¡Juego terminado!"
   end
 
 end
