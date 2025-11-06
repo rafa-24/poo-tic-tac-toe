@@ -1,16 +1,16 @@
 class Board 
-  attr_accessor :rows, :columns
-  attr_reader :grid
+   
+  attr_reader :rows, :columns, :grid
 
-  def initialize(rows, columns)
+  def initialize(rows = 3, columns = 3)
     @rows = rows
     @columns = columns
     @grid = Array.new(rows) { Array.new(columns, " ") }
   end
 
-  def create_board 
+  def display
     puts "Tablero de #{rows}x#{columns}"
-    puts "-" * (columns * 4 - 1)  # línea superior
+    puts "-" * (columns * 4 - 1) 
 
     @grid.each_with_index do |row, index|
       puts row.map { |cell| " #{cell} " }.join('|')
@@ -18,10 +18,10 @@ class Board
     end
   end
 
-  def write_board(row, column, symbol)
+  def write_cell(row, column, symbol)
     if @grid[row][column] == ' '
       @grid[row][column] = symbol
-      self.create_board
+      self.display
       true
     else
       puts 'Esa casilla ya esta ocupada. Intente en otra'
@@ -45,8 +45,5 @@ class Board
       return diagonal1[0] if diagonal1.all? { |cell| cell == diagonal1[0] && cell != ' ' }
       return diagonal2[0] if diagonal2.all? { |cell| cell == diagonal2[0] && cell != ' ' }
     end
-
-    nil
   end
-
 end

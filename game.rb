@@ -3,23 +3,16 @@ require_relative 'board'
 
 class Game
   
-  def start_game
+  def play
     print "Bienvenido a triki\n"
 
-    player_one = Player.create_player(1)
-    player_two = Player.create_player(2)
+    player_one = create_player(1)
+    player_two = create_player(2)
 
-    # crear tablero # refactorizar en clase board
-    print 'Seleccione numero de filas del tablero: '
-    rows = gets.chomp.to_i
-    print 'Seleccione numero de columnas del tablero: '
-    columns = gets.chomp.to_i
-    board = Board.new(rows, columns)
-    board.create_board
+    board = Board.new
+    board.display
 
-    # Jugar
     play_rounds(board, player_one, player_two)
-
   end
 
   private
@@ -37,7 +30,7 @@ class Game
       print 'Elige la columna: '
       column = gets.chomp.to_i
 
-      if board.write_board(row, column, current_player.avatar)
+      if board.write_cell(row, column, current_player.avatar)
 
         if board.winner? == current_player.avatar
           puts "🎉 ¡#{current_player.name} ha ganado con '#{current_player.avatar}'!"
@@ -53,7 +46,28 @@ class Game
      puts "\n🟡 El tablero está lleno. ¡Juego terminado!"
   end
 
-end
+  def create_player(number)
+    print " Jugador #{number} Ingrese nombre de usuario: "
+    name = gets.chomp
 
+    while name.empty?
+      print "❌ El nombre no puede estar vacío. Ingresa tu nombre: "
+      name = gets.chomp
+    end
+
+    print 'Elige un avatar: '
+    avatar = gets.chomp
+
+    while avatar.empty?
+      print "❌ El avatar no puede estar vacio. Ingresa tu nombre: "
+      avatar = gets.chomp
+    end
+
+    player = Player.new(name, avatar)
+    player.show_info
+    player   
+  end
+
+end
 game = Game.new
-game.start_game
+game.play
